@@ -10,11 +10,11 @@ app.use(cors());
 
 const repositories = [];
 
-app.get("/repositories", (request, response) => {
+app.get("/repositories", (req, res) => {
   return res.json(repositories);
 });
 
-app.post("/repositories", (request, response) => {
+app.post("/repositories", (req, res) => {
   const { title, url, techs } = req.body;
   
   const repository = {
@@ -30,7 +30,7 @@ app.post("/repositories", (request, response) => {
   return res.json(repository);
 });
 
-app.put("/repositories/:id", (request, response) => {
+app.put("/repositories/:id", (req, res) => {
   const { id } = req.params;
 
   if(!isUuid(id)) {
@@ -72,7 +72,7 @@ app.delete("/repositories/:id", (req, res) => {
   return res.status(204).json();
 });
 
-app.post("/repositories/:id/like", (request, response) => {
+app.post("/repositories/:id/like", (req, res) => {
   const { id } = req.params;
 
   if(!isUuid(id)) {
