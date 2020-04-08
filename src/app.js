@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
-const { uuid } = require("uuidv4");
+const { uuid, isUuid } = require("uuidv4");
 
 const app = express();
 
@@ -31,7 +31,31 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = req.params;
+
+  if(!isUuid(id)) {
+    return res.status(400).json({error: 'You must inform a valid Id.'})
+  }
+
+  const { title, url, techs } = req.body;
+
+  const repos = repositories.map(repo => {
+    var temp = {...repo};
+    if(repo.id === id) {
+       return {
+         ...repo,
+         title: title && temp.title !== title ? title : temp.title,
+         url: url && temp.url !== url ? url : temp.url,
+         techs: techs && Array.isArray(techs) && temp.techs !== techs ? techs : temp.techs,
+        }
+    } else {
+      return {...repo};
+    }
+  });
+
+  repositories.splice(0, repositories.length, ...repos);
+
+  return res.json(repositories.find(repo => repo.id === id));
 });
 
 app.delete("/repositories/:id", (req, res) => {
