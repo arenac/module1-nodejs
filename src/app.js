@@ -3,10 +3,14 @@ const cors = require("cors");
 
 const { uuid, isUuid } = require("uuidv4");
 
+const logTime = require("./midlewares/logTime");
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+app.use(logTime);
 
 const repositories = [];
 
