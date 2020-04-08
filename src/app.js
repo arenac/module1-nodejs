@@ -73,7 +73,27 @@ app.delete("/repositories/:id", (req, res) => {
 });
 
 app.post("/repositories/:id/like", (request, response) => {
-  // TODO
+  const { id } = req.params;
+
+  if(!isUuid(id)) {
+    return res.status(400).json({error: 'You must inform a valid Id.'})
+  }
+
+  const repos = repositories.map(repo => {
+    var temp = {...repo};
+    if(repo.id === id) {
+       return {
+         ...repo,
+         likes: repo.likes + 1,
+        }
+    } else {
+      return {...repo};
+    }
+  });
+
+  repositories.splice(0, repositories.length, ...repos);
+
+  return res.json(repositories.find(repo => repo.id === id));
 });
 
 module.exports = app;
